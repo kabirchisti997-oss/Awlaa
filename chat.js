@@ -170,8 +170,15 @@ export async function renderChat(container) {
                 ? `<img src="${item.avatar_url}" style="width: 100%; height: 100%; object-fit: cover;">` 
                 : `<i class="fas fa-user" style="color: #ccc;"></i>`;
             
-            let subText = type === 'request' ? 'Sent you a request' : 'Click to chat';
-            if (type === 'search') subText = item.username;
+            let subText = '';
+            if (type === 'request') {
+                const messagePreview = item.message || 'Sent you a request';
+                subText = messagePreview.length > 28 ? messagePreview.substring(0, 28) + '...' : messagePreview;
+            } else if (type === 'chat') {
+                subText = 'Click to chat';
+            } else if (type === 'search') {
+                subText = item.username;
+            }
 
             div.innerHTML = `
                 <div class="user-avatar">${avatarHtml}</div>
@@ -267,7 +274,7 @@ function openAcceptUI(targetUser, container, currentUser) {
             <div style="background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #eee; font-style: italic;">"${targetUser.message}"</div>
             
             <div style="display: flex; gap: 10px; justify-content: center;">
-                <button id="decline-btn" class="btn" style="background: #333; border: 1px solid #444;">Decline</button>
+                <button id="block-btn" class="btn" style="background-color: #dc3545;">Block</button>
                 <button id="accept-btn" class="btn">Accept</button>
             </div>
         </div>
@@ -279,7 +286,7 @@ function openAcceptUI(targetUser, container, currentUser) {
         openChatUI(targetUser, container, currentUser);
     });
 
-    document.getElementById('decline-btn').addEventListener('click', async () => {
+    document.getElementById('block-btn').addEventListener('click', async () => {
         await supabase.from('chat_requests').delete().eq('id', targetUser.requestId);
         // On mobile, slide the main view out
         document.querySelector('.chat-container').classList.remove('chat-active');
