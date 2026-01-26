@@ -20,9 +20,9 @@ export async function renderChat(container) {
             /* Chat Messages Styles */
             .messages-area { flex: 1; width: 100%; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
             .message-input-area { width: 100%; padding: 20px; background: #1a1a1a; border-top: 1px solid #333; display: flex; gap: 10px; }
-            .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
-            .msg-sent { align-self: flex-end; background: #007bff; color: white; border-bottom-right-radius: 2px; }
-            .msg-received { align-self: flex-start; background: #333; color: white; border-bottom-left-radius: 2px; }
+            .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 20px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
+            .msg-sent { align-self: flex-end; background: #0095f6; color: white; border-bottom-right-radius: 5px; }
+            .msg-received { align-self: flex-start; background: #262626; color: white; border-bottom-left-radius: 5px; }
 
             .chat-back-btn { display: none; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; margin-right: 15px; line-height: 1; padding: 0 5px; }
 
@@ -64,6 +64,7 @@ export async function renderChat(container) {
     const sidebarList = document.getElementById('sidebar-list');
     const mainArea = document.getElementById('chat-main-area');
 
+    let activeChatChannel = null;
     let debounceTimer;
 
     // Initial Load
@@ -143,7 +144,8 @@ export async function renderChat(container) {
             `;
 
             div.addEventListener('click', () => {
-                openChatUI(item, mainArea, currentUser);
+                const isNewChat = type === 'search';
+                openChatUI(item, mainArea, currentUser, { isNewChat });
             });
 
             sidebarList.appendChild(div);
@@ -151,7 +153,7 @@ export async function renderChat(container) {
     }
 }
 
-async function openChatUI(targetUser, container, currentUser) {
+async function openChatUI(targetUser, container, currentUser, options = {}) {
     // On mobile, slide the main view in
     document.querySelector('.chat-container').classList.add('chat-active');
 
@@ -165,6 +167,7 @@ async function openChatUI(targetUser, container, currentUser) {
                 <strong style="color: #fff;">${targetUser.username}</strong>
             </div>
             <div id="messages-area" class="messages-area"></div>
+            <div id="typing-indicator" style="padding: 0 20px 5px; color: #888; font-style: italic; height: 20px; display: none;"></div>
             <div class="message-input-area">
                 <input type="text" id="msg-input" placeholder="Message..." style="flex: 1; background: transparent; border: none; color: #fff; outline: none;">
                 <button id="send-msg-btn" style="background: transparent; border: none; color: #0ff; cursor: pointer; font-weight: 600;">Send</button>
@@ -176,6 +179,7 @@ async function openChatUI(targetUser, container, currentUser) {
     const input = document.getElementById('msg-input');
     const sendBtn = document.getElementById('send-msg-btn');
     const backBtn = document.getElementById('chat-back-btn');
+    const typingIndicator = document.getElementById('typing-indicator');
 
     backBtn.addEventListener('click', () => {
         document.querySelector('.chat-container').classList.remove('chat-active');
@@ -192,26 +196,51 @@ async function openChatUI(targetUser, container, currentUser) {
         messages.forEach(m => appendMessage(m, msgsArea, currentUser.id));
     }
 
-    // Subscribe
-    const channel = supabase.channel(`chat:${currentUser.id}-${targetUser.id}`)
+    // Unsubscribe from previous channel if it exists
+    if (activeChatChannel) {
+        supabase.removeChannel(activeChatChannel);
+    }
+
+    // Create a canonical channel name by sorting user IDs
+    const channelName = [currentUser.id, targetUser.id].sort().join('-');
+    const channel = supabase.channel(`chat:${channelName}`);
+    activeChatChannel = channel;
+
+    let typingTimer;
+    channel
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
             if ((payload.new.sender_id === currentUser.id && payload.new.receiver_id === targetUser.id) ||
                 (payload.new.sender_id === targetUser.id && payload.new.receiver_id === currentUser.id)) {
                 appendMessage(payload.new, msgsArea, currentUser.id);
             }
         })
+        .on('broadcast', { event: 'typing' }, ({ payload }) => {
+            if (payload.userId === targetUser.id) {
+                typingIndicator.textContent = `${targetUser.username} is typing...`;
+                typingIndicator.style.display = 'block';
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                }, 3000); // Hide after 3 seconds
+            }
+        })
         .subscribe();
 
+    input.addEventListener('input', () => {
+        channel.track({ event: 'typing', payload: { userId: currentUser.id } });
+    });
+
+    let { isNewChat } = options;
     const sendMessage = async () => {
         const text = input.value.trim();
         if (!text) return;
 
-        // Don't optimistically add here, let the realtime subscription handle it
-        // to avoid duplicate messages if the user has two tabs open.
         input.value = '';
 
-        // When a message is sent, refresh the chat list to include the new partner if they weren't there before
-        loadChatsList();
+        if (isNewChat) {
+            loadChatsList();
+            isNewChat = false; // Ensure it only runs once per new chat session
+        }
         
         await supabase.from('messages').insert({ sender_id: currentUser.id, receiver_id: targetUser.id, content: text });
     };
