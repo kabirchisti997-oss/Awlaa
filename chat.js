@@ -39,25 +39,17 @@ export async function renderChat(container) {
 
             /* Mobile Responsive Styles */
             @media (max-width: 768px) {
-                .chat-sidebar {
-                    width: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height: 100%;
-                    z-index: 1;
-                    border-right: none;
+                .chat-container { display: block; }
+                .chat-sidebar { width: 100%; height: 100%; border-right: none; }
+                .chat-main { display: none; width: 100%; height: 100%; }
+
+                .chat-container.chat-active .chat-sidebar {
+                    display: none;
                 }
-                .chat-main {
-                    width: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    height: 100%;
-                    transform: translateX(100%);
-                    z-index: 2;
+                .chat-container.chat-active .chat-main {
+                    display: flex;
                 }
-                .chat-container.chat-active .chat-main { transform: translateX(0); }
+
                 .chat-back-btn { display: block; }
             }
         </style>
