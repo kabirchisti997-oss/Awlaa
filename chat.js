@@ -316,6 +316,27 @@ function openSendRequestUI(targetUser) {
             e.target.textContent = 'Sending...';
 
             const { data: { user } } = await supabase.auth.getUser();
+
+            // Check if a request or chat already exists between these two users
+            const { data: existingRequest, error: checkError } = await supabase
+                .from('chat_requests')
+                .select('id')
+                .or(`and(sender_id.eq.${user.id},receiver_id.eq.${targetUser.id}),and(sender_id.eq.${targetUser.id},receiver_id.eq.${user.id})`)
+                .maybeSingle();
+
+            if (checkError) {
+                alert('Error checking for existing chat: ' + checkError.message);
+                e.target.disabled = false;
+                e.target.textContent = 'Send Request';
+                return;
+            }
+
+            if (existingRequest) {
+                alert("You already have a pending request or an active chat with this user.");
+                modalOverlay.style.display = 'none';
+                return;
+            }
+
             const { error } = await supabase.from('chat_requests').insert({
                 sender_id: user.id,
                 receiver_id: targetUser.id,
