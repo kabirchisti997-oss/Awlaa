@@ -190,7 +190,7 @@ export async function renderChat(container) {
 
             div.addEventListener('click', () => {
                 if (type === 'search') openRequestUI(item, mainArea, currentUser);
-                else if (type === 'request') openAcceptUI(item, mainArea, currentUser);
+                else if (type === 'request') openAcceptUI(item, mainArea, currentUser, loadRequestsList);
                 else if (type === 'chat') openChatUI(item, mainArea, currentUser);
             });
 
@@ -262,35 +262,50 @@ function openRequestUI(targetUser, container, currentUser) {
     });
 }
 
-function openAcceptUI(targetUser, container, currentUser) {
+function openAcceptUI(targetUser, container, currentUser, refreshRequestsList) {
     // On mobile, slide the main view in
     document.querySelector('.chat-container').classList.add('chat-active');
 
     container.innerHTML = `
-        <div class="request-modal">
-            ${targetUser.avatar_url ? `<img src="${targetUser.avatar_url}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">` : `<i class="fas fa-user" style="font-size: 60px; color: #666; margin-bottom: 15px;"></i>`}
-            <h3 style="color: #fff; margin-bottom: 10px;">${targetUser.username}</h3>
-            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Sent you a request</p>
-            <div style="background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #eee; font-style: italic;">"${targetUser.message}"</div>
-            
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button id="block-btn" class="btn" style="background-color: #dc3545;">Block</button>
-                <button id="accept-btn" class="btn">Accept</button>
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+            <div style="padding: 15px; border-bottom: 1px solid #333; display: flex; align-items: center; background: #1a1a1a;">
+                <button id="accept-back-btn" class="chat-back-btn">&lt;</button>
+                <strong style="color: #fff;">Chat Request</strong>
+            </div>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                <div class="request-modal" style="box-shadow: none; border: none; width: 100%; max-width: 400px;">
+                    ${targetUser.avatar_url ? `<img src="${targetUser.avatar_url}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">` : `<i class="fas fa-user" style="font-size: 60px; color: #666; margin-bottom: 15px;"></i>`}
+                    <h3 style="color: #fff; margin-bottom: 10px;">${targetUser.username}</h3>
+                    <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Wants to send you a message.</p>
+                    <div style="background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #eee; font-style: italic; text-align: left;">"${targetUser.message}"</div>
+                    
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button id="block-btn" class="btn" style="background-color: #dc3545;">Block</button>
+                        <button id="accept-btn" class="btn">Accept</button>
+                    </div>
+                </div>
             </div>
         </div>
     `;
 
-    document.getElementById('accept-btn').addEventListener('click', async () => {
+    const backBtn = document.getElementById('accept-back-btn');
+    const acceptBtn = document.getElementById('accept-btn');
+    const blockBtn = document.getElementById('block-btn');
+
+    backBtn.addEventListener('click', () => {
+        document.querySelector('.chat-container').classList.remove('chat-active');
+    });
+
+    acceptBtn.addEventListener('click', async () => {
         await supabase.from('chat_requests').update({ status: 'accepted' }).eq('id', targetUser.requestId);
-        alert("Request Accepted!");
+        alert("Request Accepted! You can now chat with this user.");
         openChatUI(targetUser, container, currentUser);
     });
 
-    document.getElementById('block-btn').addEventListener('click', async () => {
+    blockBtn.addEventListener('click', async () => {
         await supabase.from('chat_requests').delete().eq('id', targetUser.requestId);
-        // On mobile, slide the main view out
         document.querySelector('.chat-container').classList.remove('chat-active');
-        container.innerHTML = '';
+        if (refreshRequestsList) refreshRequestsList();
     });
 }
 
