@@ -12,9 +12,9 @@ export async function renderChat(container) {
 
     container.innerHTML = `
         <style>
-            .chat-container { display: flex; height: 100%; width: 100%; overflow: hidden; }
+            .chat-container { display: flex; height: 100%; width: 100%; overflow: hidden; position: relative; }
             .chat-sidebar { width: 300px; background: #1a1a1a; border-right: 1px solid #333; display: flex; flex-direction: column; padding: 15px; }
-            .chat-main { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; position: relative; flex-direction: column; }
+            .chat-main { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; position: relative; flex-direction: column; transition: transform 0.3s ease-in-out; }
             .search-bar { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 15px; outline: none; }
             .search-bar:focus { border-color: #0ff; }
             
@@ -34,6 +34,32 @@ export async function renderChat(container) {
             .msg-bubble { max-width: 70%; padding: 10px 15px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
             .msg-sent { align-self: flex-end; background: #007bff; color: white; border-bottom-right-radius: 2px; }
             .msg-received { align-self: flex-start; background: #333; color: white; border-bottom-left-radius: 2px; }
+
+            .chat-back-btn { display: none; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer; margin-right: 15px; line-height: 1; padding: 0 5px; }
+
+            /* Mobile Responsive Styles */
+            @media (max-width: 768px) {
+                .chat-sidebar {
+                    width: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    z-index: 1;
+                    border-right: none;
+                }
+                .chat-main {
+                    width: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    transform: translateX(100%);
+                    z-index: 2;
+                }
+                .chat-container.chat-active .chat-main { transform: translateX(0); }
+                .chat-back-btn { display: block; }
+            }
         </style>
         <div class="chat-container">
             <div class="chat-sidebar">
@@ -175,6 +201,9 @@ export async function renderChat(container) {
 }
 
 function openRequestUI(targetUser, container, currentUser) {
+    // On mobile, slide the main view in
+    document.querySelector('.chat-container').classList.add('chat-active');
+
     // ... (Same UI as before for sending requests)
     container.innerHTML = `
         <div class="request-modal">
@@ -190,8 +219,12 @@ function openRequestUI(targetUser, container, currentUser) {
             </div>
         </div>
     `;
-    // ... (Event listeners for send/cancel - same as before)
-    document.getElementById('cancel-req').addEventListener('click', () => { container.innerHTML = ''; });
+
+    document.getElementById('cancel-req').addEventListener('click', () => {
+        // On mobile, slide the main view out
+        document.querySelector('.chat-container').classList.remove('chat-active');
+        container.innerHTML = ''; 
+    });
 
     document.getElementById('send-req').addEventListener('click', async () => {
         const message = document.getElementById('request-message').value;
@@ -231,6 +264,9 @@ function openRequestUI(targetUser, container, currentUser) {
 }
 
 function openAcceptUI(targetUser, container, currentUser) {
+    // On mobile, slide the main view in
+    document.querySelector('.chat-container').classList.add('chat-active');
+
     container.innerHTML = `
         <div class="request-modal">
             ${targetUser.avatar_url ? `<img src="${targetUser.avatar_url}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px;">` : `<i class="fas fa-user" style="font-size: 60px; color: #666; margin-bottom: 15px;"></i>`}
@@ -253,14 +289,20 @@ function openAcceptUI(targetUser, container, currentUser) {
 
     document.getElementById('decline-btn').addEventListener('click', async () => {
         await supabase.from('chat_requests').delete().eq('id', targetUser.requestId);
+        // On mobile, slide the main view out
+        document.querySelector('.chat-container').classList.remove('chat-active');
         container.innerHTML = '';
     });
 }
 
 async function openChatUI(targetUser, container, currentUser) {
+    // On mobile, slide the main view in
+    document.querySelector('.chat-container').classList.add('chat-active');
+
     container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
             <div style="padding: 15px; border-bottom: 1px solid #333; display: flex; align-items: center; background: #1a1a1a;">
+                <button id="chat-back-btn" class="chat-back-btn">&lt;</button>
                 <div class="user-avatar" style="width: 30px; height: 30px; margin-right: 10px;">
                      ${targetUser.avatar_url ? `<img src="${targetUser.avatar_url}" style="width: 100%; height: 100%; object-fit: cover;">` : `<i class="fas fa-user"></i>`}
                 </div>
@@ -277,6 +319,11 @@ async function openChatUI(targetUser, container, currentUser) {
     const msgsArea = document.getElementById('messages-area');
     const input = document.getElementById('msg-input');
     const sendBtn = document.getElementById('send-msg-btn');
+    const backBtn = document.getElementById('chat-back-btn');
+
+    backBtn.addEventListener('click', () => {
+        document.querySelector('.chat-container').classList.remove('chat-active');
+    });
 
     // Load history
     const { data: messages } = await supabase
