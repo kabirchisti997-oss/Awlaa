@@ -1,0 +1,21 @@
+{
+    "name": "AwlaaCore AI",
+    "short_name": "AwlaaCore",
+    "description": "Awlaa Global Premium AI Assistant & Infrastructure Client",
+    "start_url": "./index.html?source=pwa",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#c9a438",
+    "icons": [
+        {
+            "src": "Awlaa Global Main Logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "Awlaa Global Main Logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

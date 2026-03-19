@@ -1,24 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Web App</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Load Supabase from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <!-- Background Canvas for Particles -->
-    <canvas id="particle-canvas"></canvas>
+    <meta name="theme-color" content="#c9a438">
+    <link rel="manifest" href="manifest.json">
+    <title>Awlaa Global - The Ultimate All-In-One Platform</title>
+    <meta name="google-site-verification" content="G3A-hR0tXvKxGz-1Bv3hK9zCqL_D4E2F1B2A3hK9zCq" />
+    <meta name="description" content="Welcome to Awlaa Global Private Limited. Your premium all-in-one destination for IT solutions, AI, Web Development, Graphic Design, Interior Decoration, and Education.">
+    <meta name="keywords" content="Awlaa Global, Awlaa Global Private Limited, AwlaaCore AI, Awlaa, IT services Kolkata, Web Development, AI training, Graphic Design">
+    <meta name="author" content="CEO of Awlaa Global">
 
-    <div id="app-container">
-        <nav id="sidebar"></nav>
-        <main id="main-content"></main>
+    <!-- Advanced SEO & Social Metadata -->
+    <link rel="canonical" href="https://awlaaglobal.com/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://awlaaglobal.com" />
+    <meta property="og:title" content="Awlaa Global - The Ultimate All-In-One Platform" />
+    <meta property="og:description" content="Welcome to Awlaa Global Private Limited. Your premium all-in-one destination for IT solutions, AI, Web Development, Graphic Design, Interior Decoration, and Education." />
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/username/repo/main/Awlaa%20Global%20Logo.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://awlaaglobal.com/" />
+    <meta property="twitter:title" content="Awlaa Global Private Limited | Corporate Holding & Innovation" />
+    <meta property="twitter:description"
+        content="Experience the future of global innovation with Awlaa Global. Leading in tech, infrastructure, and digital transformation." />
+    <meta property="twitter:image"
+        content="https://raw.githubusercontent.com/username/repo/main/Awlaa%20Global%20Logo.png" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Awlaa Global Private Limited",
+      "alternateName": "Awlaa Global",
+      "url": "https://awlaaglobal.com",
+      "logo": "https://awlaaglobal.com/Awlaa%20Global%20Logo.png",
+      "sameAs": [
+        "https://www.linkedin.com/company/awlaaglobal"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-98315-09834",
+        "contactType": "customer service",
+        "areaServed": "IN",
+        "availableLanguage": "en"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Manrope:wght@200;300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Nav Google Sign-In Button (shown when not logged in) */
+        .nav-google-signin-btn {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 50px;
+            color: var(--text);
+            font-family: var(--font-b);
+            font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            cursor: pointer; transition: all 0.35s ease;
+            white-space: nowrap; backdrop-filter: blur(10px);
+        }
+        .nav-google-signin-btn:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.35);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="global-bg">
+        <video id="bg-video-loop" autoplay playsinline muted loop preload="auto" poster="images/video-poster-placeholder.jpg">
+            <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-abstract-gold-particles-in-slow-motion-dark-background-30232-large.mp4"
+                type="video/mp4">
+        </video>
+    </div>
+    <canvas id="gold-particles"></canvas>
+
+    <!-- ═══════════════════════════════════════════════
+         NAVBAR
+    ═══════════════════════════════════════════════ -->
+    <div id="left-sidebar" class="left-sidebar"></div>
+
+    <nav class="navbar">
+        <a href="#" class="nav-brand" draggable="false">
+            <img src="Awlaa Global Main Logo.png" alt="Awlaa Global" class="brand-logo" draggable="false">
+            <div id="god-mode-trigger" title="[SECRET] Admin Access"></div>
+        </a>
+        <div class="nav-menu">
+            <a href="#tech-services" class="nav-link">Services</a>
+            <a href="#services" class="nav-link">Division</a>
+            <a href="#investors" class="nav-link">Investors</a>
+            <a href="#global" class="nav-link">Global</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+        <!-- Google Sign-In Button (top right) -->
+        <div class="nav-auth-area">
+            <!-- Hamburger Button for Mobile -->
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Unified Auth/Tier Badge Button -->
+            <!-- Shown when signed IN -->
+            <button class="nav-tier-btn" id="nav-tier-btn" title="Account & Tier" style="display:none;">
+                <span class="nav-tier-icon" id="nav-tier-icon">👤</span>
+                <span class="nav-tier-label" id="nav-tier-label"></span>
+                <div class="nav-tier-glow"></div>
+            </button>
+            <!-- Shown when GUEST (not signed in) -->
+            <button class="nav-google-signin-btn" id="nav-google-signin-btn" title="Sign in with Google">
+                <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="width:18px;height:18px;flex-shrink:0;">
+                    <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.6 33.1 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 7.1 29.3 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/>
+                    <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.5 19 13 24 13c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 7.1 29.3 5 24 5 16.3 5 9.7 9.1 6.3 14.7z"/>
+                    <path fill="#4CAF50" d="M24 45c5.2 0 9.9-1.9 13.4-5.1l-6.2-5.2C29.3 36.6 26.8 37.5 24 37.5c-5.1 0-9.5-3-11.3-7.3l-6.5 5C9.6 41 16.3 45 24 45z"/>
+                    <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.4-2.4 4.4-4.4 5.9l6.2 5.2C36.9 40.4 44 35.1 44 25c0-1.3-.1-2.6-.4-3.9z"/>
+                </svg>
+                <span>SIGN IN</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════
+         HERO SECTION
+    ═══════════════════════════════════════════════ -->
+    <header class="hero-section">
+        <div class="hero-content fade-in">
+            <h1 id="hero-headline">
+                <img src="Awlaa Global Main Logo.png" class="hero-logo" alt="Awlaa Global" draggable="false">
+            </h1>
+            <div class="gold-divider" style="margin-top: 2rem;"></div>
+            <p class="hero-subtext">Awlaa Global Private Limited operates across infrastructure, technology, education,
+                Legal Kanuni systems and multi-industry solutions. Engineered for tomorrow.</p>
+            <div class="hero-cta-group">
+                <a href="#contact" class="cta-button">Initiate Dialogue</a>
+                <a href="#tech-services" class="cta-button-ghost">Explore Services</a>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <div class="scroll-line"></div>
+            <span>Scroll</span>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════
+         STATS BAR
+    ═══════════════════════════════════════════════ -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         DIVISION SECTION
+    ═══════════════════════════════════════════════ -->
+    <section id="services" class="section-pad">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Capabilities</span>
+                <h2 class="section-title">Division</h2>
+            </div>
+            <div class="services-layout fade-in">
+                <div class="services-text">
+                    <p>Awlaa Global Private Limited (CIN: U85499WR2026PTC292930) is a registered multi-division company operating across Technology, Infrastructure, Legal Services, Education, Media, and Retail — delivering real solutions built and executed directly by our own teams.</p>
+                    <a href="#tech-services" class="inline-link">View all services <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+                <div id="divisions-container" class="services-list-block"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SERVICES SECTION
+    ═══════════════════════════════════════════════ -->
+    <section id="tech-services" class="section-pad dark-glass">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Operational</span>
+                <h2 class="section-title">Services</h2>
+            </div>
+            <div id="tech-services-wrapper" class="tech-services-wrapper fade-in"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         GLOBAL PRESENCE
+    ═══════════════════════════════════════════════ -->
+    <section id="global" class="section-pad">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Operations</span>
+                <h2 class="section-title">Our Footprint</h2>
+            </div>
+            <div class="global-stats fade-in">
+                <div class="global-stat-card">
+                    <div class="global-stat-icon"><i class="fas fa-layer-group"></i></div>
+                    <h2>15</h2>
+                    <p>Divisions</p>
+                    <div class="gold-line"></div>
+                </div>
+                <div class="global-stat-card">
+                    <div class="global-stat-icon"><i class="fas fa-microchip"></i></div>
+                    <h2>Powerful</h2>
+                    <p>AI Services</p>
+                    <div class="gold-line"></div>
+                </div>
+                <div class="global-stat-card">
+                    <div class="global-stat-icon"><i class="fas fa-handshake"></i></div>
+                    <h2>100%</h2>
+                    <p>Client Dedication</p>
+                    <div class="gold-line"></div>
+                </div>
+                <div class="global-stat-card">
+                    <div class="global-stat-icon"><i class="fas fa-headset"></i></div>
+                    <h2>24/7</h2>
+                    <p>Operational Support</p>
+                    <div class="gold-line"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════
+         VISION / INVESTORS
+    ═══════════════════════════════════════════════ -->
+    <section id="investors" class="section-pad">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-label">Real World Operations</span>
+                <h2 class="section-title">Our Operational Reality</h2>
+            </div>
+            <div class="investor-grid fade-in">
+                <div class="inv-col">
+                    <div class="inv-icon"><i class="fas fa-layer-group"></i></div>
+                    <h3>Integrated Ecosystem</h3>
+                    <p>We are not just a holding entity; we are an operational engine. We bridge the gap between digital intelligence and physical infrastructure. From coding complex AI algorithms to installing smart home electrical systems, we handle the execution directly.</p>
+                </div>
+                <div class="inv-col">
+                    <div class="inv-icon"><i class="fas fa-tools"></i></div>
+                    <h3>Active Divisions</h3>
+                    <ul class="mission-list">
+                        <li><strong>Tech:</strong> AI, Web & Custom Software</li>
+                        <li><strong>Infra:</strong> Construction & Smart Homes</li>
+                        <li><strong>Legal Kanuni:</strong> All-India Expert Court Cases</li>
+                        <li><strong>Media:</strong> Branding & Publishing</li>
+                        <li><strong>Retail:</strong> Garments & Trading</li>
+                    </ul>
+                </div>
+                <div class="inv-col">
+                    <div class="inv-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <h3>Tangible Output</h3>
+                    <ul class="mission-list">
+                        <li>Deployed Production Software</li>
+                        <li>Executed Turnkey Interiors</li>
+                        <li>Legal Representation in Courts</li>
+                        <li>Operational Government Services</li>
+                        <li>Physical Product Distribution</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         BOARD OF DIRECTORS
+    ═══════════════════════════════════════════════ -->
+    <section id="directors" class="section-pad dark-glass">
+        <div class="container">
+            <div class="section-header fade-in text-center">
+                <span class="section-label">Leadership</span>
+                <h2 class="section-title">Board of Directors</h2>
+            </div>
+            <div class="directors-grid fade-in">
+                <div class="director-card">
+                    <div class="director-icon"><i class="fas fa-user-tie"></i></div>
+                    <h3>M. C. @ Kabir Madar</h3>
+                    <p>Director</p>
+                </div>
+                <div class="director-card">
+                    <div class="director-icon"><i class="fas fa-user"></i></div>
+                    <h3>A Begum</h3>
+                    <p>Director</p>
+                </div>
+                <div class="director-card">
+                    <div class="director-icon"><i class="fas fa-user-tie"></i></div>
+                    <h3>Tasrifuddin</h3>
+                    <p>Director</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         CONTACT SECTION
+    ═══════════════════════════════════════════════ -->
+    <section id="contact" class="section-pad">
+        <div class="container">
+            <div class="section-header fade-in" style="text-align:center;">
+                <span class="section-label" style="display:block;">Connect</span>
+                <h2 class="section-title">Initiate Dialogue</h2>
+            </div>
+
+            <div class="main-contact-block fade-in">
+                <div class="main-contact-map">
+                    <iframe src="https://www.google.com/maps?q=Hathiara+Beltala+More+Methopara,+Kolkata&output=embed"
+                        allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+
+                <div class="main-contact-icons">
+                    <div class="expandable-call-wrapper">
+                        <button class="main-contact-icon-link toggle-call-btn" title="Call Us">
+                            <i class="fas fa-phone-alt"></i>
+                        </button>
+                        <div class="call-options-popup">
+                            <a href="tel:+919831509834" class="call-option-btn">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Company Director</span>
+                            </a>
+                            <a href="tel:+916291862585" class="call-option-btn">
+                                <i class="fas fa-headset"></i>
+                                <span>Customer Care</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/916291862585" class="main-contact-icon-link" title="WhatsApp Us">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="mailto:awlaaglobal@gmail.com" class="main-contact-icon-link" title="Email Us">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         DOWNLOAD AWLAACORE AI
+    ═══════════════════════════════════════════════ -->
+    <section id="download-app" class="section-pad" style="text-align:center; background:linear-gradient(180deg, var(--bg), #08080a);">
+        <div class="container fade-in">
+            <div class="download-app-banner" id="download-app-btn" style="cursor:pointer; display:inline-flex; flex-direction:column; align-items:center; padding:3rem 2rem; border-radius:20px; background:rgba(20,20,25,0.6); border:1px solid rgba(212,175,55,0.25); box-shadow:0 10px 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(212,175,55,0.05); transition:all 0.4s ease; max-width:500px; width:100%;">
+                <img src="Awlaa Global Main Logo.png" alt="AwlaaCore AI Logo" style="width:100px; height:auto; margin-bottom:1.5rem; filter:drop-shadow(0 0 15px rgba(212,175,55,0.4));" draggable="false">
+                <h2 style="font-family:var(--font-h); color:var(--gold); font-size:2.5rem; margin-bottom:0.5rem; letter-spacing:0.02em;">Download AwlaaCore AI</h2>
+                <p style="color:var(--text2); font-size:1rem; margin-bottom:2rem; max-width:400px; line-height:1.5;">Install the most powerful AI assistant directly onto your device.</p>
+                <div style="display:inline-flex; align-items:center; gap:10px; padding:1rem 2.5rem; background:linear-gradient(135deg, #1a1a1a, #0a0a0a); border:1px solid var(--gold); border-radius:50px; color:var(--gold); text-transform:uppercase; letter-spacing:0.15em; font-size:0.85rem; font-weight:600; box-shadow:0 0 20px rgba(212,175,55,0.15); transition:transform 0.3s ease;" class="download-cta-inner">
+                    <i class="fas fa-download"></i> INSTALL NOW
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════════════ -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="Awlaa Global Main Logo.png" alt="Awlaa Global" class="footer-logo" draggable="false">
+                </div>
+                <div class="footer-links-group">
+                    <h4>Company</h4>
+                    <a href="#services">Division</a>
+                    <a href="#tech-services">Services</a>
+                    <a href="#investors">Vision</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-links-group">
+                    <h4>Connect</h4>
+                    <a href="mailto:awlaaglobal@gmail.com"><i class="fas fa-envelope"></i> Email Us</a>
+                    <a href="tel:+919831509834"><i class="fas fa-phone-alt"></i> Call Us</a>
+                    <a href="https://maps.google.com/?q=Hathiara+Beltala+More+Methopara" target="_blank"><i
+                            class="fas fa-map-marker-alt"></i> Find Us</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Awlaa Global Private Limited. All Rights Reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════
+         MODALS & PANELS
+    ═══════════════════════════════════════════════ -->
+    <div id="project-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">×</button>
+            <div class="modal-body">
+                <div class="modal-image-wrapper">
+                    <img id="modal-img" src="" alt="Service Image">
+                </div>
+                <div class="modal-details">
+                    <h3 id="modal-title">Project Title</h3>
+                    <p id="modal-desc">Project Description</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script type="module" src="app.js"></script>
+    <!-- ═══════════════════════════════════════════════
+         LIMIT REACHED MODAL
+    ═══════════════════════════════════════════════ -->
+    <div id="limit-modal-overlay" class="limit-modal-overlay">
+        <div class="limit-modal">
+            <button class="limit-modal-close" id="limit-modal-close">×</button>
+            <div class="limit-modal-icon" id="limit-modal-icon">🚫</div>
+            <h2 class="limit-modal-title" id="limit-modal-title">Chat Limit Reached</h2>
+            <p class="limit-modal-text" id="limit-modal-text">You've used all your chats for this time period.</p>
+            <div class="limit-reset-badge" id="limit-reset-badge">
+                <i class="fas fa-clock"></i>
+                <span>Resets in <strong id="limit-countdown">...</strong></span>
+            </div>
+            <!-- Guest: show Google login CTA -->
+            <div id="limit-guest-section" class="limit-guest-section" style="display:none">
+                <div class="limit-divider"><span>or get more chats instantly</span></div>
+                <button class="google-signin-btn-large" id="limit-google-btn">
+                    <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <path fill="#FFC107"
+                            d="M43.6 20.1H42V20H24v8h11.3C33.6 33.1 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 7.1 29.3 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z" />
+                        <path fill="#FF3D00"
+                            d="M6.3 14.7l6.6 4.8C14.6 15.5 19 13 24 13c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 7.1 29.3 5 24 5 16.3 5 9.7 9.1 6.3 14.7z" />
+                        <path fill="#4CAF50"
+                            d="M24 45c5.2 0 9.9-1.9 13.4-5.1l-6.2-5.2C29.3 36.6 26.8 37.5 24 37.5c-5.1 0-9.5-3-11.3-7.3l-6.5 5C9.6 41 16.3 45 24 45z" />
+                        <path fill="#1976D2"
+                            d="M43.6 20.1H42V20H24v8h11.3c-.8 2.4-2.4 4.4-4.4 5.9l6.2 5.2C36.9 40.4 44 35.1 44 25c0-1.3-.1-2.6-.4-3.9z" />
+                    </svg>
+                    Sign in with Google
+                </button>
+            </div>
+            <!-- Logged in: show upgrade CTA -->
+            <div id="limit-upgrade-section" class="limit-upgrade-section" style="display:none">
+                <div class="limit-divider"><span>unlock more chats</span></div>
+                <button class="limit-upgrade-cta" id="limit-upgrade-cta">
+                    <i class="fas fa-crown"></i> Upgrade Plan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         UPGRADE PLANS MODAL
+    ═══════════════════════════════════════════════ -->
+    <div id="upgrade-modal-overlay" class="upgrade-modal-overlay">
+        <div class="upgrade-modal">
+            <button class="upgrade-modal-close" id="upgrade-modal-close">×</button>
+            <div class="upgrade-modal-header">
+                <h2>Choose Your Plan</h2>
+                <p>Unlock more conversations with AwlaaCore AI</p>
+            </div>
+            <div class="upgrade-plans-grid">
+                <!-- Free -->
+                <div class="upgrade-plan-card current-plan" id="plan-card-free">
+                    <div class="plan-badge" style="background:linear-gradient(135deg,#1a3a6e,#2d6bc4)">⚡ Free</div>
+                    <div class="plan-price">₹0</div>
+                    <div class="plan-period">forever</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> 5 chats per period</li>
+                        <li><i class="fas fa-check"></i> Google login required</li>
+                        <li><i class="fas fa-times dim"></i> No priority access</li>
+                    </ul>
+                    <div class="plan-current-label">Current Plan</div>
+                </div>
+                <!-- Premium -->
+                <div class="upgrade-plan-card featured" id="plan-card-premium">
+                    <div class="plan-popular-tag">Most Popular</div>
+                    <div class="plan-badge" style="background:linear-gradient(135deg,#6b4c10,#c9a438)">✦ Premium</div>
+                    <div class="plan-price">₹700</div>
+                    <div class="plan-period">per billing period</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> 30 chats per period</li>
+                        <li><i class="fas fa-check"></i> Priority AI response</li>
+                        <li><i class="fas fa-check"></i> All AI features</li>
+                        <li><i class="fas fa-check"></i> Usage analytics</li>
+                    </ul>
+                    <button class="plan-select-btn gold-btn" data-tier="premium">Select Premium</button>
+                </div>
+                <!-- Unlimited -->
+                <div class="upgrade-plan-card" id="plan-card-unlimited">
+                    <div class="plan-badge" style="background:linear-gradient(135deg,#3b065e,#a855f7)">♾ Unlimited</div>
+                    <div class="plan-price">₹1,500</div>
+                    <div class="plan-period">per billing period</div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Unlimited chats</li>
+                        <li><i class="fas fa-check"></i> No restrictions</li>
+                        <li><i class="fas fa-check"></i> First priority access</li>
+                        <li><i class="fas fa-check"></i> Exclusive AI models</li>
+                        <li><i class="fas fa-check"></i> Premium support</li>
+                    </ul>
+                    <button class="plan-select-btn purple-btn" data-tier="unlimited">Select Unlimited</button>
+                </div>
+            </div>
+            <p class="payment-note"><i class="fas fa-info-circle"></i> Payment integration coming soon. Your selection
+                will be saved.</p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         UNIFIED PROFILE & TIER MODAL
+    ═══════════════════════════════════════════════ -->
+    <div id="unified-auth-overlay" class="unified-auth-overlay">
+        <div class="unified-auth-modal">
+            <button class="unified-modal-close" id="unified-modal-close">×</button>
+
+            <!-- User Profile Section -->
+            <div class="unified-profile-header">
+                <div class="unified-avatar-container">
+                    <img id="unified-avatar-img" src="" alt="User" class="unified-avatar-image" style="display:none;">
+                    <div id="unified-avatar-placeholder" class="unified-avatar-placeholder">👤</div>
+                    <div class="unified-status-dot" id="unified-status-dot"></div>
+                </div>
+                <div class="unified-user-info">
+                    <h3 id="unified-user-name">Guest User</h3>
+                    <p id="unified-user-email">Sign in to unlock tiers</p>
+                </div>
+                <button class="unified-signout-btn" id="unified-signout-btn" style="display:none;">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </button>
+                <button class="unified-google-btn main-google-btn" id="unified-google-btn">
+                    <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <path fill="#FFC107"
+                            d="M43.6 20.1H42V20H24v8h11.3C33.6 33.1 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 7.1 29.3 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z" />
+                        <path fill="#FF3D00"
+                            d="M6.3 14.7l6.6 4.8C14.6 15.5 19 13 24 13c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 7.1 29.3 5 24 5 16.3 5 9.7 9.1 6.3 14.7z" />
+                        <path fill="#4CAF50"
+                            d="M24 45c5.2 0 9.9-1.9 13.4-5.1l-6.2-5.2C29.3 36.6 26.8 37.5 24 37.5c-5.1 0-9.5-3-11.3-7.3l-6.5 5C9.6 41 16.3 45 24 45z" />
+                        <path fill="#1976D2"
+                            d="M43.6 20.1H42V20H24v8h11.3c-.8 2.4-2.4 4.4-4.4 5.9l6.2 5.2C36.9 40.4 44 35.1 44 25c0-1.3-.1-2.6-.4-3.9z" />
+                    </svg>
+                    Sign in
+                </button>
+            </div>
+
+            <!-- Current Usage Card -->
+            <div class="unified-usage-card">
+                <div class="usage-card-header">
+                    <h4>Current Tier Usage</h4>
+                    <span id="unified-reset-badge" class="unified-reset-badge">Resets in ...</span>
+                </div>
+                <div class="usage-track-container">
+                    <div class="usage-stats">
+                        <span id="unified-usage-count">0 / 5 Used</span>
+                        <span id="unified-usage-tier" class="unified-usage-tier-badge">Guest</span>
+                    </div>
+                    <div class="unified-usage-track">
+                        <div class="unified-usage-fill" id="unified-usage-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unified-divider">
+                <span>Available Plans</span>
+            </div>
+
+            <!-- Plans Grid -->
+            <div class="unified-plans-grid">
+                <!-- Free -->
+                <div class="unified-plan-card" id="uni-plan-free">
+                    <div class="uni-plan-badge" style="background:linear-gradient(135deg,#1a3a6e,#2d6bc4)">⚡ Free</div>
+                    <div class="uni-plan-price">₹0</div>
+                    <div class="uni-plan-period">forever</div>
+                    <ul class="uni-plan-features">
+                        <li><i class="fas fa-check"></i> 10 chats / period</li>
+                        <li><i class="fas fa-check"></i> 2-message memory</li>
+                    </ul>
+                    <div class="uni-plan-status" id="uni-status-free">Current Plan</div>
+                </div>
+
+                <!-- Premium -->
+                <div class="unified-plan-card featured anim-pulse" id="uni-plan-premium">
+                    <div class="uni-popular-tag">Most Popular</div>
+                    <div class="uni-plan-badge" style="background:linear-gradient(135deg,#6b4c10,#c9a438)">✦ Premium
+                    </div>
+                    <div class="uni-plan-price">₹700</div>
+                    <div class="uni-plan-period">per billing period</div>
+                    <ul class="uni-plan-features">
+                        <li><i class="fas fa-check"></i> 30 chats / period</li>
+                        <li><i class="fas fa-check"></i> 10-message memory</li>
+                        <li><i class="fas fa-check"></i> Priority AI response</li>
+                    </ul>
+                    <button class="uni-plan-btn gold-btn" data-tier="premium">Select Premium</button>
+                    <div class="uni-plan-status" id="uni-status-premium" style="display:none;">Current Plan</div>
+                </div>
+
+                <!-- Unlimited -->
+                <div class="unified-plan-card" id="uni-plan-unlimited">
+                    <div class="uni-plan-badge" style="background:linear-gradient(135deg,#3b065e,#a855f7)">♾ Unlimited
+                    </div>
+                    <div class="uni-plan-price">₹1,500</div>
+                    <div class="uni-plan-period">per billing period</div>
+                    <ul class="uni-plan-features">
+                        <li><i class="fas fa-check"></i> Unlimited chats</li>
+                        <li><i class="fas fa-check"></i> 15-message memory</li>
+                        <li><i class="fas fa-check"></i> First priority access</li>
+                    </ul>
+                    <button class="uni-plan-btn purple-btn" data-tier="unlimited">Select Unlimited</button>
+                    <div class="uni-plan-status" id="uni-status-unlimited" style="display:none;">Current Plan</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="left-sidebar"></div>
+
+    <!-- Mobile Nav Overlay -->
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay">
+        <a href="#tech-services" class="mobile-nav-link">Services</a>
+        <a href="#services" class="mobile-nav-link">Division</a>
+        <a href="#investors" class="mobile-nav-link">Investors</a>
+        <a href="#global" class="mobile-nav-link">Global</a>
+        <a href="#contact" class="mobile-nav-link">Contact</a>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav" id="mobile-bottom-nav">
+    </div>
+
+
+    <!-- God Mode Assets -->
+    <div id="admin-pass-modal" class="god-mode-modal">
+        <div class="god-mode-modal-content">
+            <div class="gm-scanner-line"></div>
+            <h2 class="gm-title">DIRECTIVE: MASTER OVERRIDE</h2>
+            <p class="gm-desc">UNAUTHORIZED ACCESS IS PROHIBITED. PROVIDE MASTER CODE.</p>
+            <input type="password" id="admin-master-pass" placeholder="Enter Override Code..." autocomplete="off">
+            <div class="gm-modal-btns">
+                <button id="gm-cancel-btn">RETREAT</button>
+                <button id="gm-submit-btn">OVERRIDE</button>
+            </div>
+            <div id="gm-status-msg" class="gm-status"></div>
+        </div>
+    </div>
+
+    <div id="hacker-dashboard" class="hacker-dashboard">
+        <div class="hacker-bg-grid"></div>
+        <div class="hacker-header">
+            <div class="hacker-title-group">
+                <span class="hacker-status-blink">●</span>
+                <h1>AWLAAGLOBAL :: GOD_MODE_V1.0</h1>
+            </div>
+            <button id="exit-god-mode" class="hacker-exit-btn">EXIT_SYSTEM</button>
+        </div>
+        <div class="hacker-stats-bar">
+            <div class="stat-item">SYSTEM: ONLINE</div>
+            <div class="stat-item">NETWORK: ENCRYPTED</div>
+            <div class="stat-item">ACCESS: FULL_ROOT</div>
+        </div>
+        <div class="hacker-main-grid">
+            <div class="hacker-card card-large">
+                <div class="card-header">DATA_STREAM: RECENT_EVENT_PLANS</div>
+                <div class="card-body" id="gm-event-plans-list">
+                    <p class="terminal-text">Scanning for active event plans...</p>
+                </div>
+            </div>
+            <div class="hacker-card">
+                <div class="card-header">ENTITY_REGISTRY: RECENT_USERS</div>
+                <div class="card-body" id="gm-users-list">
+                    <p class="terminal-text">Fetching user registry...</p>
+                </div>
+            </div>
+            <div class="hacker-card">
+                <div class="card-header">COMM_LOGS: AI_CHATS</div>
+                <div class="card-body" id="gm-chats-list">
+                    <p class="terminal-text">Intercepting AI communication logs...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="script.js"></script>
 </body>
+
 </html>
